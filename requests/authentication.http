@@ -1,0 +1,22 @@
+###
+# @name authenticationRequest
+POST {{apiUrl}}/v1/login
+X-Client-Token: {{authClientToken}}
+
+{
+  "email": "{{authUser}}",
+  "password": "{{authPassword}}"
+}
+
+{{
+  $global.accessToken = response.parsedBody.accessToken
+
+  $global.authorizationHeadersWitoutBearer = {
+    'X-Client-Token': `${authClientToken}`,
+  }
+
+  $global.authorizationHeaders = {
+    'X-Client-Token': `${authClientToken}`,
+    Authorization: `Bearer ${$global.accessToken}`,
+  }
+}}

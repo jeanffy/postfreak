@@ -1,0 +1,4 @@
+###
+# @title get version
+# @name get-version
+GET {{apiUrl}}/

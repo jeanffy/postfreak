@@ -1,0 +1,35 @@
+# @import ./authentication.http
+
+###
+# @title get a public route, without authentication
+# @name get-public
+GET {{apiUrl}}/v1/public
+
+###
+# @title get all users
+# @name get-users
+# @ref authenticationRequest
+GET {{apiUrl}}/v1/users
+  ?startAt={{paginationStartAt}}
+  &maxResults={{paginationMaxResults}}
+...$global.authorizationHeaders
+
+###
+# @title create a user
+# @name create-user
+# @ref authenticationRequest
+POST {{apiUrl}}/v1/users
+...$global.authorizationHeaders
+
+< ./bodies/v1-post-user.body.json
+
+{{
+  $global.createdUserUuid = response.parsedBody.uuid;
+}}
+
+###
+# @title get a user by its uuid
+# @name get-user
+# @ref authenticationRequest
+GET {{apiUrl}}/v1/users/{{$global.createdUserUuid || userUuid}}
+...$global.authorizationHeaders
